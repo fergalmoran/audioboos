@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
       <RootNamespace>AudioBoos.Server</RootNamespace>
+      <AssemblyName>AudioBoos.Server</AssemblyName>
+      <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
