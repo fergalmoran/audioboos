@@ -8,6 +8,8 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { siteConfig } from "../../store";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,12 +23,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type Props = {
-  title: string | undefined;
-};
-
-const Navbar = ({ title }: Props) => {
+const Navbar = () => {
   const classes = useStyles();
+
+  const [theme, setTheme] = useRecoilState(siteConfig);
+  const settings = useRecoilValue(siteConfig);
 
   return (
     <AppBar position="static">
@@ -40,8 +41,11 @@ const Navbar = ({ title }: Props) => {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" className={classes.title}>
-          {title}
+          {settings.settings?.siteName}
         </Typography>
+        <Button color="inherit" onClick={() => setTheme({ theme: "Farts" })}>
+          Set theme
+        </Button>
         <Button color="inherit">Login</Button>
       </Toolbar>
     </AppBar>

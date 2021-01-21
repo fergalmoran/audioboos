@@ -1,5 +1,5 @@
 import React from "react";
-import ArtistsList from "../components/widgets/ArtistsList";
+import { ArtistsList } from "../components/widgets";
 
 const ArtistsPage = () => {
   return (

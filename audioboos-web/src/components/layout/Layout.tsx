@@ -1,29 +1,32 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import SettingsService from "../../services/api/settingsService";
-import { Settings } from "../../models";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import { ThemeProvider } from "@material-ui/core";
 import theme from "../../theme";
+import { useRecoilState } from "recoil";
+import { siteConfig } from "../../store";
 type Props = {
   children: React.ReactNode;
 };
 
 const Layout = ({ children }: Props) => {
-  const settingsService = new SettingsService();
-  const [settings, setSettings] = useState<Settings>();
+  const [settings, setSettings] = useRecoilState(siteConfig);
+
   useEffect(() => {
-    const loadArtists = async () => {
+    const settingsService = new SettingsService();
+    const loadSettings = async () => {
       const results = await settingsService.getSettings();
-      setSettings(results);
+      setSettings({ settings: results });
     };
-    loadArtists();
+    loadSettings();
   }, []);
+
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
-        <Navbar title={settings?.siteName} />
+        <Navbar />
         {children}
         <Footer />
       </ThemeProvider>
