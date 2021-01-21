@@ -21,10 +21,13 @@ namespace AudioBoos.Server.Controllers {
         [HttpGet]
         public async Task<ActionResult<List<ArtistDTO>>> Get() {
             var dirList = await FileSystemHelpers.GetDirectoriesAsync(_systemSettings.AudioPath);
-            return dirList.Select(d => new ArtistDTO {
-                Hostname = _systemSettings.Hostname,
-                ArtistName = d.GetFolderName()
-            }).ToList();
+            return dirList
+                .Select((d, i) => new ArtistDTO {
+                    Id = i,
+                    ArtistName = d.GetBaseName()
+                })
+                .OrderBy(a => a.ArtistName)
+                .ToList();
         }
     }
 }

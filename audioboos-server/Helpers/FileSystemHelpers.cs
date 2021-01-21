@@ -9,8 +9,17 @@ namespace AudioBoos.Server.Helpers {
             return Task.FromResult(results);
         }
 
-        public static string GetFolderName(this string path) {
+        public static string GetBaseName(this string path) {
             return Path.GetFileName(path);
+        }
+
+        public static string GetAbsolutePath(this string path) {
+            return new FileInfo(path).FullName;
+        }
+
+        public static Task<string[]> GetFilesAsync(string path) {
+            var results = Directory.GetFiles(path);
+            return Task.FromResult(results);
         }
     }
 }
