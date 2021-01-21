@@ -1,5 +1,5 @@
 import AlbumsList from "./AlbumsList";
 import ArtistsList from "./ArtistsList";
-import Album from "./Album";
+import AlbumTrackList from "./AlbumTrackList";
 
-export { AlbumsList, ArtistsList, Album };
+export { AlbumsList, ArtistsList, AlbumTrackList };

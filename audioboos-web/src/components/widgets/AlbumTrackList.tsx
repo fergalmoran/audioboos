@@ -12,7 +12,6 @@ import {
 import AudioPlayer from "material-ui-audio-player";
 
 import { Album } from "../../models";
-import AudioBoosService from "../../services/api/audiosBooService";
 
 const useStyles = makeStyles({
   table: {
@@ -20,22 +19,12 @@ const useStyles = makeStyles({
   },
 });
 type Props = {
-  artistName: string;
-  albumName: string;
+  album?: Album;
 };
 
-function Albums({ artistName, albumName }: Props) {
+const AlbumTrackList = ({ album }: Props) => {
   const classes = useStyles();
 
-  const _service = new AudioBoosService();
-  const [album, setAlbum] = useState<Album | undefined>();
-  useEffect(() => {
-    const loadArtists = async () => {
-      const results = await _service.getAlbum(artistName, albumName);
-      setAlbum(results);
-    };
-    loadArtists();
-  }, []);
   return (
     <React.Fragment>
       {album && album.tracks && (
@@ -43,7 +32,7 @@ function Albums({ artistName, albumName }: Props) {
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Track Number</TableCell>
+                <TableCell>#</TableCell>
                 <TableCell>Title</TableCell>
                 <TableCell>Title</TableCell>
               </TableRow>
@@ -81,6 +70,6 @@ function Albums({ artistName, albumName }: Props) {
       )}
     </React.Fragment>
   );
-}
+};
 
-export default Albums;
+export default AlbumTrackList;

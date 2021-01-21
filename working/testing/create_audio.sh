@@ -7,7 +7,7 @@
 echo Removing existing
 rm -rf albums/
 NUM_ARTISTS=5
-NUM_ALBUMS=5
+NUM_ALBUMS=3
 NUM_TRACKS=9
 FREQ_START=500
 FREQ_INC=46 #in honour of Joe
@@ -21,6 +21,18 @@ do
         album_folder="${artist_folder}/${artist_folder} - Album ${album}"
         echo "Creating ${album_folder}"
         mkdir -p "albums/${album_folder}"
+
+        uuid=$(uuidgen)
+        photoFile="albums/$album_folder/AlbumArt_{$uuid}_Large.jpg"
+        thumbNail="albums/$album_folder/AlbumArt_{$uuid}_Small.jpg"
+        echo $photoFile
+        echo $thumbnailFile
+
+        echo "Creating artwork"
+        wget https://picsum.photos/1600/1600 -O "${photoFile}"
+
+        echo "Generating thumbnail"
+        convert "${photoFile}" -resize 300x300\> "${thumbNail}"
         for track in $(seq 1 $NUM_TRACKS)
         do
             let frequency=$(($FREQ_START+($FREQ_INC * $track)))

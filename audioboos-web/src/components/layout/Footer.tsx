@@ -4,12 +4,13 @@ import React from "react";
 const useStyles = makeStyles((theme) => ({
   footer: {
     textAlign: "center",
+    verticalAlign: "center",
     position: "absolute",
     bottom: 0,
-    width: "99% !important",
+    width: "100% !important",
     height: "62px !important",
-    background: theme.palette.grey[400],
-    color: theme.palette.common.white
+    background: theme.palette.secondary.light,
+    color: theme.palette.common.white,
   },
 }));
 
