@@ -1,10 +1,9 @@
 import React from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import Typography from "@material-ui/core/Typography";
+
 import { Album } from "../components/widgets";
 
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search);
-};
 interface ParamTypes {
   artistName: string;
   albumName: string;
@@ -15,7 +14,15 @@ const AlbumPage = () => {
     <React.Fragment>
       {artistName && (
         <React.Fragment>
-          <h1>{albumName}</h1>
+          <Typography
+            component="h1"
+            variant="h2"
+            align="center"
+            color="textPrimary"
+            gutterBottom
+          >
+            {albumName}
+          </Typography>
           <Album artistName={artistName} albumName={albumName} />
         </React.Fragment>
       )}
