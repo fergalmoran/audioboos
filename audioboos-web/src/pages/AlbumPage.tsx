@@ -21,6 +21,14 @@ const AlbumPage = () => {
             color="textPrimary"
             gutterBottom
           >
+            {artistName}
+          </Typography>
+          <Typography
+            variant="h5"
+            align="center"
+            color="textSecondary"
+            paragraph
+          >
             {albumName}
           </Typography>
           <Album artistName={artistName} albumName={albumName} />
