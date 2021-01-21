@@ -52,7 +52,7 @@ const Layout = ({ children }: Props) => {
         <Navbar />
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Container maxWidth="lg" className={classes.container}>
+          <Container maxWidth="xl" className={classes.container}>
             <React.Fragment>{children}</React.Fragment>
           </Container>
         </main>
