@@ -1,0 +1,20 @@
+{
+    "workbench.colorTheme": "In Bed by 7pm",
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#0648ea",
+        "activityBar.activeBorder": "#5d021d",
+        "activityBar.background": "#0648ea",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "activityBarBadge.background": "#5d021d",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "statusBar.background": "#0539b8",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.hoverBackground": "#0648ea",
+        "titleBar.activeBackground": "#0539b8",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveBackground": "#0539b899",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.color": "#0539b8"
+}

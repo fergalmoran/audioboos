@@ -26,6 +26,7 @@ namespace AudioBoos.Server {
             services.AddControllers();
 
             services.AddAudioBoosOptions(Configuration);
+            services.AddAudioBoosCors(Configuration);
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "server", Version = "v1"});
@@ -45,6 +46,8 @@ namespace AudioBoos.Server {
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors("AudioBoosCors");
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
