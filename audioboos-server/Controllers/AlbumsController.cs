@@ -29,7 +29,11 @@ namespace AudioBoos.Server.Controllers {
             return dirList
                 .Select((d, i) => new AlbumDTO {
                     Id = i,
-                    AlbumName = d.GetBaseName()
+                    ArtistName = artistName,
+                    AlbumName = d.GetBaseName(),
+                    Description = Randomisers.LoremIpsum(10, 30),
+                    LargeImage =$"https://localhost:5001/image/{Path.Combine(artistName, d.GetBaseName(), d.GetAlbumArt("Large").GetBaseName())}", 
+                    SmallImage =$"https://localhost:5001/image/{Path.Combine(artistName, d.GetBaseName(), d.GetAlbumArt("Small").GetBaseName())}" 
                 })
                 .OrderBy(a => a.AlbumName)
                 .ToList();
@@ -42,12 +46,14 @@ namespace AudioBoos.Server.Controllers {
                 return NotFound();
             }
 
-            var fileList = await FileSystemHelpers.GetFilesAsync(dir);
+            var fileList = (await FileSystemHelpers.GetFilesAsync(dir))
+                .Where(f => f.IsAudioFile());
+
             var tracks = fileList
                 .Select((f, i) => new Track {
                     Id = i,
                     TrackName = f.GetBaseName(),
-                    AudioUrl = $"https://localhost:5001/audio/{Path.Combine(artistName, albumName, f.GetBaseName())}"
+                    AudioUrl = $"https://localhost:5001/audio/{Path.Combine(artistName, albumName, f.GetBaseName())}",
                 })
                 .OrderBy(a => a.Id)
                 .ToArray();
@@ -56,6 +62,9 @@ namespace AudioBoos.Server.Controllers {
                 Id = 1,
                 ArtistName = artistName,
                 AlbumName = albumName,
+                Description = Randomisers.LoremIpsum(10, 30),
+                LargeImage =$"https://localhost:5001/image/{Path.Combine(artistName, albumName, dir.GetAlbumArt("Large").GetBaseName())}", 
+                SmallImage =$"https://localhost:5001/image/{Path.Combine(artistName, albumName, dir.GetAlbumArt("Small").GetBaseName())}", 
                 Tracks = tracks
             };
             return results;

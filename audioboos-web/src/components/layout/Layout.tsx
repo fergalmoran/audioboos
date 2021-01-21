@@ -1,30 +1,61 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
+import { useEffect } from "react";
 import SettingsService from "../../services/api/settingsService";
-import { Settings } from "../../models";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
-import { ThemeProvider } from "@material-ui/core";
+import {
+  Container,
+  CssBaseline,
+  makeStyles,
+  ThemeProvider,
+} from "@material-ui/core";
 import theme from "../../theme";
+import { useRecoilState } from "recoil";
+import { siteConfig } from "../../store";
 type Props = {
   children: React.ReactNode;
 };
+const useStyles = makeStyles((theme) => ({
+  content: {
+    flexGrow: 1,
+    height: "100vh",
+    overflow: "auto",
+  },
+  container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  appBarSpacer: theme.mixins.toolbar,
+}));
 
 const Layout = ({ children }: Props) => {
-  const settingsService = new SettingsService();
-  const [settings, setSettings] = useState<Settings>();
+  const [settings, setSettings] = useRecoilState(siteConfig);
+  const classes = useStyles();
+
   useEffect(() => {
-    const loadArtists = async () => {
+    const settingsService = new SettingsService();
+    const loadSettings = async () => {
       const results = await settingsService.getSettings();
-      setSettings(results);
+      setSettings({ settings: results });
     };
-    loadArtists();
+    loadSettings();
   }, []);
+
   return (
     <React.Fragment>
+      <Helmet>
+        <title>{settings.settings?.siteName}</title>
+      </Helmet>
       <ThemeProvider theme={theme}>
-        <Navbar title={settings?.siteName} />
-        {children}
+        <CssBaseline />
+        <Navbar />
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="xl" className={classes.container}>
+            <React.Fragment>{children}</React.Fragment>
+          </Container>
+        </main>
         <Footer />
       </ThemeProvider>
     </React.Fragment>

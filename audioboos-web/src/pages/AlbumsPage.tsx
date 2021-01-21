@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams, useHistory } from "react-router-dom";
-import AlbumsList from "../components/widgets/AlbumsList";
 import { Button } from "@material-ui/core";
+import { AlbumsList } from "../components/widgets";
 
 interface ParamTypes {
   artistName: string;

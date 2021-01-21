@@ -1,15 +1,22 @@
-import { makeStyles } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import {
+  makeStyles,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 import AudioBoosService from "../../services/api/audiosBooService";
 import { Album } from "../../models";
+import Image from "material-ui-image";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > * + *": {
-      marginLeft: theme.spacing(2),
-    },
+  table: {
+    minWidth: 650,
   },
 }));
 
@@ -19,7 +26,7 @@ type Props = {
 
 function AlbumsList({ artistName }: Props) {
   const classes = useStyles();
-
+  const history = useHistory();
   const _service = new AudioBoosService();
   const [albums, setAlbums] = useState<Album[] | undefined>();
   useEffect(() => {
@@ -31,15 +38,42 @@ function AlbumsList({ artistName }: Props) {
   }, []);
   return (
     <React.Fragment>
-      {albums?.map((a) => {
-        return (
-          <Typography className={classes.root} key={a.id}>
-            <Link to={`/artist/${artistName}/${a.albumName}`}>
-              {a.albumName}
-            </Link>
-          </Typography>
-        );
-      })}
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>#</TableCell>
+              <TableCell>Title</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {albums?.map((a) => (
+              <TableRow
+                hover
+                key={a.id}
+                onClick={() =>
+                  history.push(`/artist/${artistName}/${a.albumName}`)
+                }
+              >
+                <TableCell component="th" scope="row">
+                  {a.smallImage && (
+                    <Image
+                      style={{
+                        paddingTop: 0,
+                        width: 32,
+                        height: 32,
+                      }}
+                      src={a.smallImage}
+                      disableSpinner
+                    />
+                  )}
+                </TableCell>
+                <TableCell>{a.albumName}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </React.Fragment>
   );
 }
