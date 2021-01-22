@@ -8,8 +8,12 @@ namespace AudioBoos.Server.Helpers.Startup {
             services.AddCors(options => {
                 options.AddPolicy(name: "AudioBoosCors",
                     builder => {
+                        builder.AllowAnyMethod();
+                        builder.AllowAnyHeader();
+
                         builder.WithOrigins(
-                            "http://localhost:3000"
+                            "http://localhost:3000",
+                            "http://localhost:3000/"
                         );
                     });
             });

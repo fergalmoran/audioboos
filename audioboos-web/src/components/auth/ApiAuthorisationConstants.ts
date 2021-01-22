@@ -1,4 +1,4 @@
-export const ApplicationName = "web";
+export const ApplicationName = "audioboos.web";
 
 export const QueryParameterNames = {
     ReturnUrl: "returnUrl",
@@ -24,9 +24,9 @@ const authServer = process.env.REACT_APP_API_URL;
 
 export const ApplicationPaths = {
     DefaultLoginRedirectPath: "/",
-    ApiAuthorisationClientConfigurationUrl: `_configuration/${ApplicationName}`,
+    ApiAuthorisationClientConfigurationUrl: `${authServer}/_configuration/${ApplicationName}`,
     ApiAuthorisationPrefix: prefix,
-    Login: `${window.location.origin}${prefix}/${LoginActions.Login}`,
+    Login: `${prefix}/${LoginActions.Login}`,
     LoginFailed: `${prefix}/${LoginActions.LoginFailed}`,
     LoginCallback: `${prefix}/${LoginActions.LoginCallback}`,
     Register: `${prefix}/${LoginActions.Register}`,

@@ -2,7 +2,9 @@ using AudioBoos.Server.Helpers.Startup;
 using AudioBoos.Server.Migrations.Services.Email;
 using AudioBoos.Server.Models.Store;
 using AudioBoos.Server.Persistence;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -43,6 +45,12 @@ namespace AudioBoos.Server {
 
             services.AddIdentityServer()
                 .AddApiAuthorization<AppUser, AudioBoosContext>();
+
+            services.Configure<JwtBearerOptions>(
+                IdentityServerJwtConstants.IdentityServerJwtBearerScheme,
+                options => {
+                    options.Authority = "http://localhost:3000/";
+                });
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
