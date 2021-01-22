@@ -45,4 +45,5 @@ class AudioBoosService extends ApiService {
     }
   };
 }
-export default AudioBoosService;
+const audioBoosService = new AudioBoosService();
+export default audioBoosService;

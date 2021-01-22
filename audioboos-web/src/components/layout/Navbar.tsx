@@ -13,6 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useRecoilState } from "recoil";
 import { siteConfig } from "../../store";
+import { LoginMenu } from "../auth/LoginMenu";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,7 +62,6 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
-
 }));
 
 const Navbar = () => {
@@ -97,7 +97,7 @@ const Navbar = () => {
         <Button color="inherit" onClick={() => setConfig({ theme: "Farts" })}>
           Set theme
         </Button>
-        <Button color="inherit">Login</Button>
+        <LoginMenu />
       </Toolbar>
     </AppBar>
     // <AppBar position="static">

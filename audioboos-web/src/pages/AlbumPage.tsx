@@ -2,7 +2,6 @@ import React from "react";
 import clsx from "clsx";
 import { useParams } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
-import Image from "material-ui-image";
 
 import {
   Avatar,
@@ -19,7 +18,7 @@ import {
   Paper,
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import AudioBoosService from "../services/api/audiosBooService";
+import audioBoosService from "../services/api/audiosBooService";
 import AlbumTrackList from "../components/widgets/AlbumTrackList";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
@@ -77,12 +76,11 @@ const AlbumPage = () => {
 
   useEffect(() => {
     const loadArtists = async () => {
-      const _service = new AudioBoosService();
-      const results = await _service.getAlbum(artistName, albumName);
+      const results = await audioBoosService.getAlbum(artistName, albumName);
       setAlbum(results);
     };
     loadArtists();
-  }, []);
+  }, [artistName, albumName]);
 
   return (
     <React.Fragment>

@@ -1,7 +1,7 @@
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useEffect } from "react";
-import SettingsService from "../../services/api/settingsService";
+import settingsService from "../../services/api/settingsService";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import {
@@ -34,13 +34,12 @@ const Layout = ({ children }: Props) => {
   const classes = useStyles();
 
   useEffect(() => {
-    const settingsService = new SettingsService();
     const loadSettings = async () => {
       const results = await settingsService.getSettings();
       setSettings({ settings: results });
     };
     loadSettings();
-  }, []);
+  }, [setSettings]);
 
   return (
     <React.Fragment>
