@@ -23,13 +23,18 @@ const prefix = `/authentication`;
 const authServer = process.env.REACT_APP_API_URL;
 
 export const ApplicationPaths = {
+    Login: `/${LoginActions.Login}`,
+    LoginFailed: `${LoginActions.LoginFailed}`,
+    LoginCallback: `${LoginActions.LoginCallback}`,
+    Register: `/${LoginActions.Register}`,
+
     DefaultLoginRedirectPath: "/",
     ApiAuthorisationClientConfigurationUrl: `${authServer}/_configuration/${ApplicationName}`,
     ApiAuthorisationPrefix: prefix,
-    Login: `${prefix}/${LoginActions.Login}`,
-    LoginFailed: `${prefix}/${LoginActions.LoginFailed}`,
-    LoginCallback: `${prefix}/${LoginActions.LoginCallback}`,
-    Register: `${prefix}/${LoginActions.Register}`,
+    // Login: `${prefix}/${LoginActions.Login}`,
+    // LoginFailed: `${prefix}/${LoginActions.LoginFailed}`,
+    // LoginCallback: `${prefix}/${LoginActions.LoginCallback}`,
+    // Register: `${prefix}/${LoginActions.Register}`,
     Profile: `${prefix}/${LoginActions.Profile}`,
     LogOut: `${prefix}/${LogoutActions.Logout}`,
     LoggedOut: `${prefix}/${LogoutActions.LoggedOut}`,

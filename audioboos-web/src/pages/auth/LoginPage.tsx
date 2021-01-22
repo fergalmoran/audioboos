@@ -3,6 +3,8 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
+import { useState } from "react";
+import authService from "../../services/api/authService";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -11,11 +13,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoginPage = () => {
+    const [userName, setUserName] = useState(
+        "fergal.moran+audioboos@gmail.com"
+    );
+    const [password, setPassword] = useState("secret");
     const classes = useStyles();
 
+    const doLogin = (e: any) => {
+        e.preventDefault();
+        authService.login(userName, password).then((r) => {
+            if (r) {
+                alert("Yassss boi!");
+            } else {
+                alert("Nah boi!");
+            }
+        });
+    };
     return (
         <Container className={classes.container} maxWidth="xs">
-            <form>
+            <form onSubmit={doLogin}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <Grid container spacing={2}>
@@ -26,6 +42,9 @@ const LoginPage = () => {
                                     name="email"
                                     size="small"
                                     variant="outlined"
+                                    onChange={(event) =>
+                                        setUserName(event.target.value)
+                                    }
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -36,6 +55,9 @@ const LoginPage = () => {
                                     size="small"
                                     type="password"
                                     variant="outlined"
+                                    onChange={(event) =>
+                                        setPassword(event.target.value)
+                                    }
                                 />
                             </Grid>
                         </Grid>
