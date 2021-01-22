@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 const Navbar = () => {
     const classes = useStyles();
 
-    const [config, setConfig] = useRecoilState(siteConfig);
+    const [config] = useRecoilState(siteConfig);
 
     return (
         <AppBar position="absolute" className={classes.appBar}>

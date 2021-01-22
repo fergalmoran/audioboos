@@ -2,3 +2,8 @@ working/testing/albums
 .yarn/
 .yarnrc
 .yarnrc.yml
+.eslintcache
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+.pnp.*
