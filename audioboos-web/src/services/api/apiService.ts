@@ -1,7 +1,7 @@
 class ApiService {
   protected requestClient = async () => {
     const axios = require("axios");
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    process.env.NODE_TLS_REJECT_UNAuthorisED = "0";
     const instance = axios.create({
       baseURL: process.env.REACT_APP_API_URL,
       maxRedirects: 0,
@@ -12,7 +12,7 @@ class ApiService {
     //   if (user) {
     //     instance.interceptors.request.use((config) => {
     //       config.headers = {
-    //         Authorization: `Bearer ${user.token}`,
+    //         Authorisation: `Bearer ${user.token}`,
     //       };
     //       return config;
     //     });

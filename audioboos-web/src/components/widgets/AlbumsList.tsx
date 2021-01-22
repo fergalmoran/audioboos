@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import AudioBoosService from "../../services/api/audiosBooService";
+import audioBoosService from "../../services/api/audiosBooService";
 import { Album } from "../../models";
 import Image from "material-ui-image";
 
@@ -27,11 +27,10 @@ type Props = {
 function AlbumsList({ artistName }: Props) {
   const classes = useStyles();
   const history = useHistory();
-  const _service = new AudioBoosService();
   const [albums, setAlbums] = useState<Album[] | undefined>();
   useEffect(() => {
     const loadArtists = async () => {
-      const results = await _service.getAlbums(artistName);
+      const results = await audioBoosService.getAlbums(artistName);
       setAlbums(results);
     };
     loadArtists();
