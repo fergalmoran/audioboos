@@ -1,38 +1,46 @@
 import React from "react";
-import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Redirect,
+} from "react-router-dom";
 
-import {Layout} from "./components/layout";
+import { Layout } from "./components/layout";
 import AlbumPage from "./pages/AlbumPage";
 import AlbumsPage from "./pages/AlbumsPage";
 import ArtistsPage from "./pages/ArtistsPage";
 import HomePage from "./pages/HomePage";
 import ApiAuthorisationRoutes from "./components/auth/ApiAuthorisationRoutes";
-import {ApplicationPaths} from "./components/auth/ApiAuthorisationConstants";
+import { ApplicationPaths } from "./components/auth/ApiAuthorisationConstants";
 import NotFoundPage from "./pages/NotFoundPage";
-
+import LoginPage from "./pages/auth/LoginPage";
 function App() {
     return (
         <Router>
             <Layout>
                 <Switch>
                     <Route path="/artists">
-                        <ArtistsPage/>
+                        <ArtistsPage />
+                    </Route>
+                    <Route path="/login">
+                        <LoginPage />
                     </Route>
                     <Route path="/artist/:artistName/:albumName">
-                        <AlbumPage/>
+                        <AlbumPage />
                     </Route>
                     <Route path="/artist/:artistName">
-                        <AlbumsPage/>
+                        <AlbumsPage />
                     </Route>
                     <Route
                         path={ApplicationPaths.ApiAuthorisationPrefix}
                         component={ApiAuthorisationRoutes}
                     />
                     <Route exact path="/">
-                        <HomePage/>
+                        <HomePage />
                     </Route>
-                    <Route path="/404" component={NotFoundPage}/>
-                    <Redirect to="/404"/>
+                    <Route path="/404" component={NotFoundPage} />
+                    <Redirect to="/404" />
                 </Switch>
             </Layout>
         </Router>

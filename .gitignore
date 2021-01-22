@@ -1,1 +1,4 @@
 working/testing/albums
+.yarn/
+.yarnrc
+.yarnrc.yml
