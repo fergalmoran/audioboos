@@ -11,10 +11,9 @@ import AlbumPage from "./pages/AlbumPage";
 import AlbumsPage from "./pages/AlbumsPage";
 import ArtistsPage from "./pages/ArtistsPage";
 import HomePage from "./pages/HomePage";
-import ApiAuthorisationRoutes from "./components/auth/ApiAuthorisationRoutes";
-import { ApplicationPaths } from "./components/auth/ApiAuthorisationConstants";
 import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
 function App() {
     return (
         <Router>
@@ -26,16 +25,19 @@ function App() {
                     <Route path="/login">
                         <LoginPage />
                     </Route>
+                    <Route path="/register">
+                        <RegisterPage />
+                    </Route>
                     <Route path="/artist/:artistName/:albumName">
                         <AlbumPage />
                     </Route>
                     <Route path="/artist/:artistName">
                         <AlbumsPage />
                     </Route>
-                    <Route
+                    {/* <Route
                         path={ApplicationPaths.ApiAuthorisationPrefix}
                         component={ApiAuthorisationRoutes}
-                    />
+                    /> */}
                     <Route exact path="/">
                         <HomePage />
                     </Route>

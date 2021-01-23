@@ -1,10 +1,7 @@
+using System;
 using AudioBoos.Server.Helpers.Startup;
 using AudioBoos.Server.Migrations.Services.Email;
-using AudioBoos.Server.Models.Store;
 using AudioBoos.Server.Persistence;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -24,8 +21,9 @@ namespace AudioBoos.Server {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            services.AddAudioBoosOptions(Configuration);
-            services.AddAudioBoosCors(Configuration);
+            if (services == null) {
+                throw new NullReferenceException("Startup.services cannot be null");
+            }
 
             services.AddDbContext<AudioBoosContext>(options =>
                 options.UseNpgsql(
@@ -33,35 +31,15 @@ namespace AudioBoos.Server {
                 )
             );
 
-            services.AddDefaultIdentity<AppUser>(
-                    options => {
-                        options.SignIn.RequireConfirmedAccount = false;
-                        options.Password.RequireDigit = false;
-                        options.Password.RequireUppercase = false;
-                        options.Password.RequireNonAlphanumeric = false;
-                        options.Password.RequiredLength = 4;
-                    })
-                .AddEntityFrameworkStores<AudioBoosContext>();
-
-            services.AddIdentityServer()
-                .AddApiAuthorization<AppUser, AudioBoosContext>();
-
-            services.Configure<JwtBearerOptions>(
-                IdentityServerJwtConstants.IdentityServerJwtBearerScheme,
-                options => {
-                    options.Authority = "http://localhost:3000/";
-                });
-
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
-
-            services.AddControllersWithViews();
-            services.AddRazorPages();
+            services.AddAudioBoosOptions(Configuration)
+                .AddAudioBoosCors(Configuration)
+                .AddAudioBoosIdentity(Configuration);
 
             services.AddTransient<IEmailSender, EmailSender>();
 
+            services.AddControllers();
             services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "AudioBoos Server", Version = "v1"});
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "arse", Version = "v1"});
             });
         }
 
@@ -79,21 +57,15 @@ namespace AudioBoos.Server {
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
+            app.UseHttpsRedirection();
             app.UseRouting();
 
-            app.UseCors("AudioBoosCors");
+            app.UseAudioBoosCors()
+                .UseAudioBoosIdentity();
 
-            app.UseAuthentication();
-            app.UseIdentityServer();
-            app.UseAuthorization();
             app.UseEndpoints(endpoints => {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
 
             using var scope = app.ApplicationServices.CreateScope();

@@ -1,14 +1,17 @@
 ﻿using AudioBoos.Server.Models.Settings;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AudioBoos.Server.Helpers.Startup {
     public static class CorsStartup {
+        private static readonly string policyName = "AudioBoosCors";
+
         public static IServiceCollection AddAudioBoosCors(this IServiceCollection services, IConfiguration config) {
             services.AddCors(options => {
-                options.AddPolicy(name: "AudioBoosCors",
+                options.AddPolicy(name: policyName,
                     builder => {
-                        builder.AllowAnyMethod();
+                        builder.AllowCredentials();
                         builder.AllowAnyHeader();
 
                         builder.WithOrigins(
@@ -19,6 +22,11 @@ namespace AudioBoos.Server.Helpers.Startup {
             });
 
             return services;
+        }
+
+        public static IApplicationBuilder UseAudioBoosCors(this IApplicationBuilder app) {
+            app.UseCors(policyName);
+            return app;
         }
     }
 }

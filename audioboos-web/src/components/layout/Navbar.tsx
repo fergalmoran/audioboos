@@ -12,7 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useRecoilState } from "recoil";
 import { siteConfig } from "../../store";
-import LoginMenu from "../auth/LoginMenu";
+import { LoginMenu } from "../auth";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -96,7 +96,6 @@ const Navbar = () => {
                 <LoginMenu />
             </Toolbar>
         </AppBar>
-
     );
 };
 

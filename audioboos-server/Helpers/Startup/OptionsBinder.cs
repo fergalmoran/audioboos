@@ -10,6 +10,7 @@ namespace AudioBoos.Server.Helpers.Startup {
             services.AddOptions();
             services.Configure<SystemSettings>(config.GetSection("System"));
             services.Configure<EmailOptions>(config.GetSection("EmailOptions"));
+            services.Configure<JWT>(config.GetSection("JWT"));
 
             return services;
         }
