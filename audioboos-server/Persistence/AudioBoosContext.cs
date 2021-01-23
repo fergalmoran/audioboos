@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Linq;
 using AudioBoos.Server.Models.Store;
-using IdentityServer4.EntityFramework.Options;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Protocols;
 
 namespace AudioBoos.Server.Persistence {
-    public class AudioBoosContext : ApiAuthorizationDbContext<AppUser> {
+    public class AudioBoosContext : IdentityDbContext<AppUser> {
         public DbSet<Artist> Artists { get; set; }
         public DbSet<Album> Albums { get; set; }
         public DbSet<Album> Tracks { get; set; }
 
-
         public AudioBoosContext(
-            DbContextOptions options,
-            IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions) {
+            DbContextOptions options) : base(options) {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
@@ -25,7 +19,7 @@ namespace AudioBoos.Server.Persistence {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<AppUser>(b => {
-                b.ToTable("AppUsers");  
+                b.ToTable("AppUsers");
             });
 
             foreach (var entity in modelBuilder.Model.GetEntityTypes()

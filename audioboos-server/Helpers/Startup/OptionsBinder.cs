@@ -1,5 +1,6 @@
 ﻿using AudioBoos.Server.Migrations.Services.Email;
 using AudioBoos.Server.Models.Settings;
+using AudioBoos.Server.Services.Email;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,7 +9,8 @@ namespace AudioBoos.Server.Helpers.Startup {
         public static IServiceCollection AddAudioBoosOptions(this IServiceCollection services, IConfiguration config) {
             services.AddOptions();
             services.Configure<SystemSettings>(config.GetSection("System"));
-            services.Configure<EmailOptions>(config.GetSection("EmailApiOptions"));
+            services.Configure<EmailOptions>(config.GetSection("EmailOptions"));
+            services.Configure<JWT>(config.GetSection("JWT"));
 
             return services;
         }
