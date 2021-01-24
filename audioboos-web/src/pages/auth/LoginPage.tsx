@@ -18,7 +18,7 @@ import { auth } from "../../store";
 
 const LoginPage = () => {
     const history = useHistory();
-    const [authSettings, setAuthSettings] = useRecoilState(auth);
+    const [, setAuthSettings] = useRecoilState(auth);
 
     const doLogin = async (email: string, password: string) => {
         const token = await authService.login(email, password);

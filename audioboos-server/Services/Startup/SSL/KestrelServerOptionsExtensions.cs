@@ -7,12 +7,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace AudioBoos.Server.Services.Startup.SSL {
     public static class KestrelServerOptionsExtensions {
         public static void ConfigureEndpoints(this KestrelServerOptions options) {
             var configuration = options.ApplicationServices.GetRequiredService<IConfiguration>();
-            var environment = options.ApplicationServices.GetRequiredService<IHostingEnvironment>();
+            var environment = options.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
 
             var endpoints = configuration.GetSection("HttpServer:Endpoints")
                 .GetChildren()
@@ -48,7 +49,7 @@ namespace AudioBoos.Server.Services.Startup.SSL {
             }
         }
 
-        private static X509Certificate2 LoadCertificate(EndpointConfiguration config, IHostingEnvironment environment) {
+        private static X509Certificate2 LoadCertificate(EndpointConfiguration config, IHostEnvironment environment) {
             if (config.StoreName != null && config.StoreLocation != null) {
                 using (var store = new X509Store(config.StoreName, Enum.Parse<StoreLocation>(config.StoreLocation))) {
                     store.Open(OpenFlags.ReadOnly);

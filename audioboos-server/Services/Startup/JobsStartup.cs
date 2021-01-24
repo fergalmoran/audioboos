@@ -6,8 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AudioBoos.Server.Services.Startup {
     public static class JobsStartup {
-        private static readonly string policyName = "AudioBoosCors";
-
         public static IServiceCollection AddAudioBoosJobs(this IServiceCollection services, IConfiguration config) {
             services.AddHostedService<UpdateLibraryJob>();
             return services;

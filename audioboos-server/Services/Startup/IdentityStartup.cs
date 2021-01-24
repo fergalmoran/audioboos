@@ -27,13 +27,11 @@ namespace AudioBoos.Server.Services.Startup {
                 options.Cookie.Name = $"AudioBoos.Auth";
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-                options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.Lax;
-                options.Events = new CookieAuthenticationEvents {
-                    OnRedirectToLogin = x => {
-                        x.Response.Redirect(config.GetValue<string>("System:WebClientUrl"));
-                        return Task.CompletedTask;
-                    }
+                options.Events.OnRedirectToLogin = context => {
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
                 };
             });
 
