@@ -1,12 +1,13 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { auth } from "../../store";
+import authService from "../../services/api/authService";
 
 const LoginMenu = () => {
     const history = useHistory();
-    const { isLoggedIn } = useRecoilValue(auth);
+    const [authSettings, setAuthSettings] = useRecoilState(auth);
 
     const authenticatedView = () => {
         return (
@@ -14,7 +15,16 @@ const LoginMenu = () => {
                 <Link className="text-dark" to="/profile">
                     Hello, Sailor
                 </Link>
-                <Button color="inherit" onClick={() => history.push("/logout")}>
+                <Button
+                    color="inherit"
+                    onClick={async () => {
+                        const result = await authService.logout();
+                        if (result) {
+                            setAuthSettings({ isLoggedIn: false });
+                            result && history.push("/");
+                        }
+                    }}
+                >
                     Logout
                 </Button>
             </React.Fragment>
@@ -37,10 +47,8 @@ const LoginMenu = () => {
         );
     };
 
-    if (!isLoggedIn) {
-        return anonymousView("/register", "/login");
-    } else {
-        return authenticatedView();
-    }
+    return authSettings.isLoggedIn
+        ? authenticatedView()
+        : anonymousView("/register", "/login");
 };
 export default LoginMenu;

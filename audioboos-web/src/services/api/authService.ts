@@ -12,26 +12,27 @@ class AuthService extends ApiService {
         }
         return false;
     };
+    logout = async (): Promise<boolean> => {
+        const client = await this.requestClient();
+
+        try {
+            const response = await client.post("/auth/logout");
+            return response.status === 200;
+        } catch (err) {
+            console.error("authService", "logout", err);
+        }
+        return false;
+    };
+
     login = async (username: string, password: string): Promise<string> => {
         const client = await this.requestClient();
 
         try {
-            const response = await client.post(
-                "/auth/login",
-                {
-                    email: username,
-                    password: password,
-                },
-                {
-                    withCredentials: true,
-                    credentials: "include",
-                    crossDomain: true,
-                }
-            );
-            if (response && response.status === 200) {
-                const token = response.data.id_token;
-                return token || "";
-            }
+            const response = await client.post("/auth/login", {
+                email: username,
+                password: password,
+            });
+            return response && response.status === 200;
         } catch (err) {
             console.error("Exception fetching settings", err);
         }
@@ -41,31 +42,20 @@ class AuthService extends ApiService {
         username: string,
         password: string,
         confirmPassword: string
-    ): Promise<string> => {
+    ): Promise<boolean> => {
         const client = await this.requestClient();
 
         try {
-            const response = await client.post(
-                "/auth/register",
-                {
-                    email: username,
-                    password: password,
-                    confirmPassword: confirmPassword,
-                },
-                {
-                    withCredentials: true,
-                    credentials: "include",
-                    crossDomain: true,
-                }
-            );
-            if (response && response.status === 200) {
-                const token = response.data.id_token;
-                return token || "";
-            }
+            const response = await client.post("/auth/register", {
+                email: username,
+                password: password,
+                confirmPassword: confirmPassword,
+            });
+            return response && response.status === 200;
         } catch (err) {
             console.error("Exception fetching settings", err);
         }
-        return "";
+        return false;
     };
 }
 const authService = new AuthService();

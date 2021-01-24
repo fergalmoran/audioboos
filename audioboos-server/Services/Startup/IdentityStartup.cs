@@ -22,8 +22,15 @@ namespace AudioBoos.Server.Services.Startup {
                     })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AudioBoosContext>();
-
+            
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            
             services.ConfigureApplicationCookie(options => {
+                //TODO: Cookie Name in settings
                 options.Cookie.Name = $"AudioBoos.Auth";
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
@@ -39,6 +46,7 @@ namespace AudioBoos.Server.Services.Startup {
         }
 
         public static IApplicationBuilder UseAudioBoosIdentity(this IApplicationBuilder app) {
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
 

@@ -21,10 +21,11 @@ const LoginPage = () => {
     const [, setAuthSettings] = useRecoilState(auth);
 
     const doLogin = async (email: string, password: string) => {
-        const token = await authService.login(email, password);
-        setAuthSettings({ isLoggedIn: token ? true : false, token: token });
-
-        history.push("/");
+        const result = await authService.login(email, password);
+        if (result) {
+            setAuthSettings({ isLoggedIn: true });
+            history.push("/");
+        }
     };
 
     return (
