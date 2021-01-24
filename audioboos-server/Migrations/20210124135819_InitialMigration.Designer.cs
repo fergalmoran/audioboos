@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AudioBoos.Server.Migrations
 {
     [DbContext(typeof(AudioBoosContext))]
-    [Migration("20210123004913_Initial")]
-    partial class Initial
+    [Migration("20210124135819_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -3,10 +3,11 @@ using AudioBoos.Server.Models.Store;
 using AudioBoos.Server.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AudioBoos.Server.Helpers.Startup {
+namespace AudioBoos.Server.Services.Startup {
     public static class IdentityStartup {
         public static IServiceCollection AddAudioBoosIdentity(this IServiceCollection services, IConfiguration config) {
             services.AddDefaultIdentity<AppUser>(
@@ -17,6 +18,7 @@ namespace AudioBoos.Server.Helpers.Startup {
                         options.Password.RequireNonAlphanumeric = false;
                         options.Password.RequiredLength = 4;
                     })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AudioBoosContext>();
 
             services.ConfigureApplicationCookie(options => {

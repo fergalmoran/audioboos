@@ -1,10 +1,9 @@
-﻿using AudioBoos.Server.Migrations.Services.Email;
-using AudioBoos.Server.Models.Settings;
+﻿using AudioBoos.Server.Models.Settings;
 using AudioBoos.Server.Services.Email;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AudioBoos.Server.Helpers.Startup {
+namespace AudioBoos.Server.Services.Startup {
     public static class OptionsBinder {
         public static IServiceCollection AddAudioBoosOptions(this IServiceCollection services, IConfiguration config) {
             services.AddOptions();
