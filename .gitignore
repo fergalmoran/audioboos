@@ -6,4 +6,4 @@ working/testing/albums
 .yarn/*
 !.yarn/releases
 !.yarn/plugins
-.pnp.*
+.pnp.*certs/ca.crt certs/ca.key certs/ca.srl

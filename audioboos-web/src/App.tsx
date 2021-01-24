@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     BrowserRouter as Router,
     Switch,
@@ -14,7 +14,21 @@ import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
+import { useRecoilState } from "recoil";
+import { auth } from "./store";
+import authService from "./services/api/authService";
 function App() {
+    const [authSettings, setAuthSettings] = useRecoilState(auth);
+
+    useEffect(() => {
+        const checkIsAuth = async () => {
+            const result = await authService.isAuthed();
+            setAuthSettings({ ...authSettings, isLoggedIn: result });
+        };
+
+        checkIsAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     return (
         <Router>
             <Layout>

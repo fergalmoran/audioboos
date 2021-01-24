@@ -27,7 +27,8 @@ const RegisterValidation = yup.object().shape({
 });
 const RegisterPage = () => {
     const history = useHistory();
-    const [token, setToken] = useRecoilState(auth);
+
+    const [authSettings, setAuthSettings] = useRecoilState(auth);
 
     const doRegister = async (
         email: string,
@@ -39,8 +40,12 @@ const RegisterPage = () => {
             password,
             confirmPassword
         );
-        setToken({ token: token });
-        return token ? true : false;
+        setAuthSettings({
+            isLoggedIn: token ? true : false,
+            token: token,
+        });
+
+        return authSettings.isLoggedIn;
     };
 
     return (

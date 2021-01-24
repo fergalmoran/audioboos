@@ -1,4 +1,9 @@
 namespace AudioBoos.Server.Models.DTO {
+    public class AuthPingDTO {
+        public bool Success { get; set; }
+        public string Message { get; set; }
+    }
+
     public class AlbumDTO {
         public int Id { get; set; }
         public string ArtistName { get; set; }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AudioBoos.Server.Models.Store;
 using AudioBoos.Server.Persistence;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -22,16 +24,17 @@ namespace AudioBoos.Server.Services.Startup {
                 .AddEntityFrameworkStores<AudioBoosContext>();
 
             services.ConfigureApplicationCookie(options => {
-                options.AccessDeniedPath = "/Account/AccessDenied";
                 options.Cookie.Name = $"AudioBoos.Auth";
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-                options.LoginPath = "/auth/login";
-                options.ReturnUrlParameter = "/";
-                options.SlidingExpiration = true;
-
                 options.Cookie.SecurePolicy = CookieSecurePolicy.None;
                 options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Events = new CookieAuthenticationEvents {
+                    OnRedirectToLogin = x => {
+                        x.Response.Redirect("http://localhost:3000/login");
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             return services;

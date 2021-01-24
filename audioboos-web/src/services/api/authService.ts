@@ -1,8 +1,17 @@
 import ApiService from "./apiService";
 
-const authServer = process.env.REACT_APP_API_URL;
-
 class AuthService extends ApiService {
+    isAuthed = async (): Promise<boolean> => {
+        const client = await this.requestClient();
+
+        try {
+            const response = await client.get("/auth/p");
+            return response && response.status === 200 && response.data.success;
+        } catch (err) {
+            console.error("Exception fetching settings", err);
+        }
+        return false;
+    };
     login = async (username: string, password: string): Promise<string> => {
         const client = await this.requestClient();
 
