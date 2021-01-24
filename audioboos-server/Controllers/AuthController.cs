@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using AudioBoos.Server.Models.DTO;
 using AudioBoos.Server.Models.Settings;
 using AudioBoos.Server.Models.Store;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
-
-namespace AudioBoos.Server.Controllers {
-}
 
 namespace AudioBoos.Server.Controllers {
     [ApiController]
@@ -43,6 +44,24 @@ namespace AudioBoos.Server.Controllers {
             _emailSender = emailSender;
         }
 
+        private async Task _sendRegisterEmail(AppUser user) {
+            // if email required
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            var callbackUrl = Url.Page(
+                "/Account/ConfirmEmail",
+                pageHandler: null,
+                values: new {area = "Identity", userId = user.Id, code = code, returnUrl = "TODO:"},
+                protocol: Request.Scheme);
+
+            if (_userManager.Options.SignIn.RequireConfirmedAccount) {
+                await _emailSender.SendEmailAsync(
+                    user.Email,
+                    "Confirm your email",
+                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            }
+        }
+
         private async Task<JwtSecurityToken> _getUserToken(AppUser user) {
             var userRoles = await _userManager.GetRolesAsync(user);
 
@@ -51,9 +70,9 @@ namespace AudioBoos.Server.Controllers {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
-            foreach (var userRole in userRoles) {
-                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-            }
+            authClaims.AddRange(userRoles.Select(userRole =>
+                new Claim(ClaimTypes.Role, userRole))
+            );
 
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Secret));
 
@@ -87,23 +106,7 @@ namespace AudioBoos.Server.Controllers {
             if (result.Succeeded) {
                 _logger.LogInformation("User created a new account with password");
 
-                // if email required
-                // var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                // code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                // var callbackUrl = Url.Page(
-                //     "/Account/ConfirmEmail",
-                //     pageHandler: null,
-                //     values: new {area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl},
-                //     protocol: Request.Scheme);
-                //
-                // if (_userManager.Options.SignIn.RequireConfirmedAccount) {
-                //     await _emailSender.SendEmailAsync(
-                //         request.Email,
-                //         "Confirm your email",
-                //         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-                //     return RedirectToPage("RegisterConfirmation",
-                //         new {email = request.Email, returnUrl = returnUrl});
-                // }
+                //TODO: _sendRegisterEmail();
 
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 var token = await _getUserToken(user);
@@ -127,6 +130,7 @@ namespace AudioBoos.Server.Controllers {
                 return Unauthorized();
             }
 
+            await _signInManager.SignInAsync(user, isPersistent: false);
             var token = await _getUserToken(user);
             return Ok(new {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -137,7 +141,15 @@ namespace AudioBoos.Server.Controllers {
         [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> OnLogoutAsync() {
+            if (HttpContext.Request.Cookies.Count > 0) {
+                var siteCookies = HttpContext.Request.Cookies.Where(c => c.Key.Equals("AudioBoos.Auth"));
+                foreach (var cookie in siteCookies) {
+                    Response.Cookies.Delete(cookie.Key);
+                }
+            }
+
             await HttpContext.SignOutAsync();
+            HttpContext.Session.Clear();
             return Ok();
         }
     }

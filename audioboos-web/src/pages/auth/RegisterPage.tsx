@@ -35,14 +35,13 @@ const RegisterPage = () => {
         password: string,
         confirmPassword: string
     ): Promise<boolean> => {
-        const token = await authService.register(
+        const result = await authService.register(
             email,
             password,
             confirmPassword
         );
         setAuthSettings({
-            isLoggedIn: token ? true : false,
-            token: token,
+            isLoggedIn: result,
         });
 
         return authSettings.isLoggedIn;
