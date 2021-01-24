@@ -2,6 +2,7 @@ using System;
 using AudioBoos.Server.Helpers.Startup;
 using AudioBoos.Server.Migrations.Services.Email;
 using AudioBoos.Server.Persistence;
+using AudioBoos.Server.Services.Startup;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -32,6 +33,7 @@ namespace AudioBoos.Server {
             );
 
             services.AddAudioBoosOptions(Configuration)
+                .AddAudioBoosJobs(Configuration)
                 .AddAudioBoosCors(Configuration)
                 .AddAudioBoosIdentity(Configuration);
 

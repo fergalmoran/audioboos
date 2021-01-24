@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AudioBoos.Server.Helpers.Startup {
+namespace AudioBoos.Server.Services.Startup {
     public static class CorsStartup {
         private static readonly string policyName = "AudioBoosCors";
 
