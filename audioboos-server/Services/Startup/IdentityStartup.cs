@@ -31,7 +31,7 @@ namespace AudioBoos.Server.Services.Startup {
                 options.Cookie.SameSite = SameSiteMode.Lax;
                 options.Events = new CookieAuthenticationEvents {
                     OnRedirectToLogin = x => {
-                        x.Response.Redirect("http://localhost:3000/login");
+                        x.Response.Redirect(config.GetValue<string>("System:WebClientUrl"));
                         return Task.CompletedTask;
                     }
                 };

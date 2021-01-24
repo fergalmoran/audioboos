@@ -15,9 +15,7 @@ namespace AudioBoos.Server.Services.Startup {
                         builder.AllowAnyHeader();
 
                         builder.WithOrigins(
-                            "http://localhost:3000",
-                            "http://localhost:3000/"
-                        );
+                            config.GetValue<string>("System:WebClientUrl"));
                     });
             });
 

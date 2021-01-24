@@ -20,14 +20,11 @@ const LoginPage = () => {
     const history = useHistory();
     const [authSettings, setAuthSettings] = useRecoilState(auth);
 
-    const doLogin = async (
-        email: string,
-        password: string
-    ): Promise<boolean> => {
+    const doLogin = async (email: string, password: string) => {
         const token = await authService.login(email, password);
         setAuthSettings({ isLoggedIn: token ? true : false, token: token });
 
-        return authSettings.isLoggedIn;
+        history.push("/");
     };
 
     return (
@@ -53,10 +50,7 @@ const LoginPage = () => {
                             .required("Password is required"),
                     })}
                     onSubmit={async (data) => {
-                        const result = await doLogin(data.email, data.password);
-                        if (result) {
-                            history.push("/", { replace: true });
-                        }
+                        await doLogin(data.email, data.password);
                     }}
                 >
                     {({

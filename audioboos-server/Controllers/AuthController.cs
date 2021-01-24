@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using AudioBoos.Server.Models.DTO;
 using AudioBoos.Server.Models.Settings;
@@ -14,12 +12,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
+
+namespace AudioBoos.Server.Controllers {
+}
 
 namespace AudioBoos.Server.Controllers {
     [ApiController]
