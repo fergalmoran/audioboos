@@ -6,10 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using AudioBoos.Server.Helpers;
 using AudioBoos.Server.Models.DTO;
 using AudioBoos.Server.Models.Settings;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 
 namespace AudioBoos.Server.Controllers {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class ArtistsController : ControllerBase {
         private readonly SystemSettings _systemSettings;

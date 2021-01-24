@@ -1,1 +1,9 @@
 working/testing/albums
+.yarn/
+.yarnrc
+.yarnrc.yml
+.eslintcache
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+.pnp.*certs/ca.crt certs/ca.key certs/ca.srl

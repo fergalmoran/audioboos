@@ -1,3 +1,4 @@
-import siteConfig from "./siteConfig";
+import siteConfig from "./siteConfigStore";
+import auth from "./authStore";
 
-export { siteConfig };
+export { siteConfig, auth };

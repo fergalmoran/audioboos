@@ -16,4 +16,5 @@ class SettingsService extends ApiService {
     }
   };
 }
-export default SettingsService;
+const settingsService = new SettingsService();
+export default settingsService;

@@ -1,17 +1,15 @@
-import { makeStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Artist } from "../../models";
-import AudioBoosService from "../../services/api/audiosBooService";
+import audioBoosService from "../../services/api/audiosBooService";
 
 function ArtistsList() {
 
-  const artistsService = new AudioBoosService();
   const [artists, setArtists] = useState<Artist[] | undefined>();
   useEffect(() => {
     const loadArtists = async () => {
-      const results = await artistsService.getArtists();
+      const results = await audioBoosService.getArtists();
       setArtists(results);
     };
     loadArtists();

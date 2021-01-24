@@ -6,7 +6,11 @@ class AudioBoosService extends ApiService {
     const client = await this.requestClient();
 
     try {
-      const response = await client.get("/artists");
+      const response = await client.get("/artists", {
+          withCredentials: true,
+          credentials: "include",
+          crossDomain: true,
+      });
       if (response && response.status === 200) {
         return response.data as Artist[];
       }
@@ -45,4 +49,5 @@ class AudioBoosService extends ApiService {
     }
   };
 }
-export default AudioBoosService;
+const audioBoosService = new AudioBoosService();
+export default audioBoosService;
