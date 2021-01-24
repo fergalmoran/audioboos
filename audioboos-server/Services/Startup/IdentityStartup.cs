@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AudioBoos.Server.Models.Store;
 using AudioBoos.Server.Persistence;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AudioBoos.Server.Helpers.Startup {
+namespace AudioBoos.Server.Services.Startup {
     public static class IdentityStartup {
         public static IServiceCollection AddAudioBoosIdentity(this IServiceCollection services, IConfiguration config) {
             services.AddDefaultIdentity<AppUser>(
@@ -17,19 +20,21 @@ namespace AudioBoos.Server.Helpers.Startup {
                         options.Password.RequireNonAlphanumeric = false;
                         options.Password.RequiredLength = 4;
                     })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AudioBoosContext>();
 
             services.ConfigureApplicationCookie(options => {
-                options.AccessDeniedPath = "/Account/AccessDenied";
                 options.Cookie.Name = $"AudioBoos.Auth";
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-                options.LoginPath = "/auth/login";
-                options.ReturnUrlParameter = "/";
-                options.SlidingExpiration = true;
-
                 options.Cookie.SecurePolicy = CookieSecurePolicy.None;
                 options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Events = new CookieAuthenticationEvents {
+                    OnRedirectToLogin = x => {
+                        x.Response.Redirect(config.GetValue<string>("System:WebClientUrl"));
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             return services;

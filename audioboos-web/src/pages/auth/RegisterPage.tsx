@@ -1,6 +1,6 @@
 import React from "react";
 import { Link as RouterLink, useHistory } from "react-router-dom";
-import * as Yup from "yup";
+import * as yup from "yup";
 import { Formik } from "formik";
 import {
     Box,
@@ -12,9 +12,41 @@ import {
     TextField,
     Typography,
 } from "@material-ui/core";
+import authService from "../../services/api/authService";
+import { useRecoilState } from "recoil";
+import { auth } from "../../store";
 
+const RegisterValidation = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup
+        .string()
+        .min(6)
+        .max(16)
+        // .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*d)[a-zA-Zd]$/)
+        .required(),
+});
 const RegisterPage = () => {
     const history = useHistory();
+
+    const [authSettings, setAuthSettings] = useRecoilState(auth);
+
+    const doRegister = async (
+        email: string,
+        password: string,
+        confirmPassword: string
+    ): Promise<boolean> => {
+        const token = await authService.register(
+            email,
+            password,
+            confirmPassword
+        );
+        setAuthSettings({
+            isLoggedIn: token ? true : false,
+            token: token,
+        });
+
+        return authSettings.isLoggedIn;
+    };
 
     return (
         <Box
@@ -30,20 +62,21 @@ const RegisterPage = () => {
                         password: "",
                         policy: false,
                     }}
-                    validationSchema={Yup.object().shape({
-                        lastName: Yup.string()
-                            .max(255)
-                            .required("Last name is required"),
-                        password: Yup.string()
-                            .max(255)
-                            .required("password is required"),
-                        policy: Yup.boolean().oneOf(
-                            [true],
-                            "This field must be checked"
-                        ),
-                    })}
-                    onSubmit={() => {
-                        history.push("/", { replace: true });
+                    validationSchema={RegisterValidation}
+                    onSubmit={async (data, { setSubmitting }) => {
+                        console.log("RegisterPage", "onSubmit", data);
+                        setSubmitting(true);
+                        const result = await doRegister(
+                            data.email,
+                            data.password,
+                            data.password
+                        );
+                        if (result) {
+                            history.push("/", {
+                                replace: true,
+                            });
+                        }
+                        setSubmitting(false);
                     }}
                 >
                     {({

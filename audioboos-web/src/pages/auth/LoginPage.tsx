@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -18,17 +18,13 @@ import { auth } from "../../store";
 
 const LoginPage = () => {
     const history = useHistory();
-    const [userName, setUserName] = useState(
-        "fergal.moran+audioboos@gmail.com"
-    );
-    const [password, setPassword] = useState("secret");
-    const [token, setToken] = useRecoilState(auth);
+    const [authSettings, setAuthSettings] = useRecoilState(auth);
 
-    const doLogin = async (): Promise<boolean>   => {
-        const token = await authService.login(userName, password);
-        setToken({ token: token });
+    const doLogin = async (email: string, password: string) => {
+        const token = await authService.login(email, password);
+        setAuthSettings({ isLoggedIn: token ? true : false, token: token });
 
-        return token ? true : false;
+        history.push("/");
     };
 
     return (
@@ -41,8 +37,8 @@ const LoginPage = () => {
             <Container maxWidth="sm">
                 <Formik
                     initialValues={{
-                        email: userName,
-                        password: password,
+                        email: "fergal.moran+audioboos@gmail.com",
+                        password: "secret",
                     }}
                     validationSchema={Yup.object().shape({
                         email: Yup.string()
@@ -53,11 +49,8 @@ const LoginPage = () => {
                             .max(255)
                             .required("Password is required"),
                     })}
-                    onSubmit={async () => {
-                        const result = await doLogin();
-                        if (result) {
-                            history.push("/", { replace: true });
-                        }
+                    onSubmit={async (data) => {
+                        await doLogin(data.email, data.password);
                     }}
                 >
                     {({
@@ -124,9 +117,7 @@ const LoginPage = () => {
                                 margin="normal"
                                 name="email"
                                 onBlur={handleBlur}
-                                onChange={(e) => {
-                                    setUserName(values.email);
-                                }}
+                                onChange={handleChange}
                                 type="email"
                                 value={values.email}
                                 variant="outlined"
@@ -141,9 +132,7 @@ const LoginPage = () => {
                                 margin="normal"
                                 name="password"
                                 onBlur={handleBlur}
-                                onChange={(e) => {
-                                    setPassword(values.password);
-                                }}
+                                onChange={handleChange}
                                 type="password"
                                 value={values.password}
                                 variant="outlined"

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AudioBoos.Server.Helpers.Startup {
+namespace AudioBoos.Server.Services.Startup {
     public static class CorsStartup {
         private static readonly string policyName = "AudioBoosCors";
 
@@ -15,9 +15,7 @@ namespace AudioBoos.Server.Helpers.Startup {
                         builder.AllowAnyHeader();
 
                         builder.WithOrigins(
-                            "http://localhost:3000",
-                            "http://localhost:3000/"
-                        );
+                            config.GetValue<string>("System:WebClientUrl"));
                     });
             });
 

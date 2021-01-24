@@ -1,11 +1,15 @@
 import { atom } from "recoil";
 
 interface IAuthStore {
-    token?: string;
+    token: string;
+    isLoggedIn: boolean;
 }
 const authStore = atom<IAuthStore>({
-    key: "siteConfig",
-    default: {},
+    key: "authConfig",
+    default: {
+        token: "",
+        isLoggedIn: false,
+    },
 });
 
 export default authStore;

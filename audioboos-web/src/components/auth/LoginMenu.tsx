@@ -1,44 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
+import { useRecoilValue } from "recoil";
+import { auth } from "../../store";
 
 const LoginMenu = () => {
     const history = useHistory();
-    // const [isAuthenticated, setIsAuthenticated] = useState(false);
-    // const [userName, setUserName] = useState("");
+    const { isLoggedIn } = useRecoilValue(auth);
 
-    let isAuthenticated = false;
-
-    // useEffect(() => {
-    //     const populateState = async () => {
-    //         const [authResult, user] = await Promise.all([
-    //             authService.isAuthenticated(),
-    //             authService.getUser(),
-    //         ]);
-    //         setIsAuthenticated(authResult);
-    //         setUserName(user && user.name);
-    //     };
-    //     const _subscription = authService.subscribe(() => populateState());
-    //     populateState();
-    //     return () => {
-    //         authService.unsubscribe(_subscription);
-    //     };
-    // }, []);
-
-    const authenticatedView = (
-        userName: string,
-        profilePath: string,
-        logoutPath: string
-    ) => {
+    const authenticatedView = () => {
         return (
             <React.Fragment>
-                <Link className="text-dark" to={profilePath}>
-                    Hello {userName}
+                <Link className="text-dark" to="/profile">
+                    Hello, Sailor
                 </Link>
-                <Button
-                    color="inherit"
-                    onClick={() => history.push(logoutPath)}
-                >
+                <Button color="inherit" onClick={() => history.push("/logout")}>
                     Logout
                 </Button>
             </React.Fragment>
@@ -61,11 +37,10 @@ const LoginMenu = () => {
         );
     };
 
-    if (!isAuthenticated) {
+    if (!isLoggedIn) {
         return anonymousView("/register", "/login");
     } else {
-        // return authenticatedView();
-        return <h1>Who's da man??</h1>;
+        return authenticatedView();
     }
 };
 export default LoginMenu;

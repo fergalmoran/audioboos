@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AudioBoos.Server.Helpers {
@@ -14,8 +16,17 @@ namespace AudioBoos.Server.Helpers {
             return Task.FromResult(results);
         }
 
+        public static Task<List<string>> GetFilesAsync(this string path) {
+            var results = Directory.GetFiles(path);
+            return Task.FromResult(results.ToList());
+        }
+
         public static string GetBaseName(this string path) {
             return Path.GetFileName(path);
+        }
+
+        public static Task<List<string>> GetAllAudioFiles(this string path) {
+            return path.GetFilesAsync();
         }
 
         public static bool IsAudioFile(this string path) {
@@ -46,11 +57,6 @@ namespace AudioBoos.Server.Helpers {
 
         public static string GetAbsolutePath(this string path) {
             return new FileInfo(path).FullName;
-        }
-
-        public static Task<string[]> GetFilesAsync(string path) {
-            var results = Directory.GetFiles(path);
-            return Task.FromResult(results);
         }
     }
 }

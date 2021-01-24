@@ -1,7 +1,7 @@
 using System;
-using AudioBoos.Server.Helpers.Startup;
 using AudioBoos.Server.Migrations.Services.Email;
 using AudioBoos.Server.Persistence;
+using AudioBoos.Server.Services.Startup;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -32,6 +32,7 @@ namespace AudioBoos.Server {
             );
 
             services.AddAudioBoosOptions(Configuration)
+                .AddAudioBoosJobs(Configuration)
                 .AddAudioBoosCors(Configuration)
                 .AddAudioBoosIdentity(Configuration);
 
@@ -70,15 +71,13 @@ namespace AudioBoos.Server {
 
             using var scope = app.ApplicationServices.CreateScope();
             using var context = scope.ServiceProvider.GetService<AudioBoosContext>();
-            if (false) {
-                if (env.IsDevelopment()) {
-                    context?.Database.ExecuteSqlRaw("DROP SCHEMA IF EXISTS app CASCADE");
-                    context?.Database.ExecuteSqlRaw("DROP SCHEMA IF EXISTS auth CASCADE");
-                    context?.Database.ExecuteSqlRaw("DROP TABLE IF EXISTS public.__EFMigrationsHistory");
-                }
-
-                context?.Database.Migrate();
-            }
+            //     if (env.IsDevelopment()) {
+            //         context?.Database.ExecuteSqlRaw("DROP SCHEMA IF EXISTS app CASCADE");
+            //         context?.Database.ExecuteSqlRaw("DROP SCHEMA IF EXISTS auth CASCADE");
+            //         context?.Database.ExecuteSqlRaw("DROP TABLE IF EXISTS public.__EFMigrationsHistory");
+            //     }
+            //
+            //     context?.Database.Migrate();
         }
     }
 }

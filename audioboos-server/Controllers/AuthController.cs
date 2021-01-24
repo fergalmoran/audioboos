@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using AudioBoos.Server.Models.DTO;
 using AudioBoos.Server.Models.Settings;
 using AudioBoos.Server.Models.Store;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
+
+namespace AudioBoos.Server.Controllers {
+}
 
 namespace AudioBoos.Server.Controllers {
     [ApiController]
@@ -66,10 +67,17 @@ namespace AudioBoos.Server.Controllers {
             return token;
         }
 
+        [Authorize]
+        [HttpGet("p")]
+        public async Task<ActionResult<AuthPingDTO>> OnPingAsync() {
+            return await Task.FromResult(Ok(new AuthPingDTO {
+                Success = true,
+                Message = "pong"
+            }));
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> OnRegisterAsync([FromBody] RegisterDTO request) {
-            var returnUrl = "https://changeme/please";
-
             if (!ModelState.IsValid) {
                 return StatusCode(500);
             }
@@ -79,22 +87,23 @@ namespace AudioBoos.Server.Controllers {
             if (result.Succeeded) {
                 _logger.LogInformation("User created a new account with password");
 
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                var callbackUrl = Url.Page(
-                    "/Account/ConfirmEmail",
-                    pageHandler: null,
-                    values: new {area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl},
-                    protocol: Request.Scheme);
-
-                if (_userManager.Options.SignIn.RequireConfirmedAccount) {
-                    await _emailSender.SendEmailAsync(
-                        request.Email,
-                        "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-                    return RedirectToPage("RegisterConfirmation",
-                        new {email = request.Email, returnUrl = returnUrl});
-                }
+                // if email required
+                // var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                // code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                // var callbackUrl = Url.Page(
+                //     "/Account/ConfirmEmail",
+                //     pageHandler: null,
+                //     values: new {area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl},
+                //     protocol: Request.Scheme);
+                //
+                // if (_userManager.Options.SignIn.RequireConfirmedAccount) {
+                //     await _emailSender.SendEmailAsync(
+                //         request.Email,
+                //         "Confirm your email",
+                //         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                //     return RedirectToPage("RegisterConfirmation",
+                //         new {email = request.Email, returnUrl = returnUrl});
+                // }
 
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 var token = await _getUserToken(user);
@@ -125,35 +134,11 @@ namespace AudioBoos.Server.Controllers {
             });
         }
 
-        [HttpPost("__login")]
-        public async Task<IActionResult> __OnLoginAsync([FromBody] LoginDTO request) {
-            var returnUrl = "http://changeme/please";
-
-            if (!ModelState.IsValid) {
-                return StatusCode(500);
-            }
-
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-            var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password,
-                request.RememberMe,
-                lockoutOnFailure: false);
-            if (result.Succeeded) {
-                _logger.LogInformation("User logged in");
-                return Ok();
-            }
-
-            if (result.RequiresTwoFactor) {
-                return RedirectToPage("/login2fa", new {ReturnUrl = returnUrl, RememberMe = request.RememberMe});
-            }
-
-            if (result.IsLockedOut) {
-                _logger.LogWarning("User account locked out");
-                return RedirectToPage("/lockedout");
-            } else {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                return Ok();
-            }
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> OnLogoutAsync() {
+            await HttpContext.SignOutAsync();
+            return Ok();
         }
     }
 }
