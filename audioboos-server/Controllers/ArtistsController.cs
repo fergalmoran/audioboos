@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using AudioBoos.Server.Helpers;
 using AudioBoos.Server.Models.DTO;
 using AudioBoos.Server.Models.Settings;
+using AudioBoos.Server.Persistence;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace AudioBoos.Server.Controllers {
@@ -15,21 +17,25 @@ namespace AudioBoos.Server.Controllers {
     [Authorize]
     [Route("[controller]")]
     public class ArtistsController : ControllerBase {
+        private readonly AudioBoosContext _context;
         private readonly SystemSettings _systemSettings;
 
-        public ArtistsController(IOptions<SystemSettings> systemSettings) {
+        public ArtistsController(IOptions<SystemSettings> systemSettings, AudioBoosContext context) {
             _systemSettings = systemSettings.Value;
+            _context = context;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<ArtistDTO>>> Get() {
-            var dirList = await FileSystemHelpers.GetDirectoriesAsync(_systemSettings.AudioPath);
-            return dirList
-                .Select((d, i) => new ArtistDTO {
-                    Id = i,
-                    ArtistName = d.GetBaseName()
+            var artists = await _context.Artists.OrderBy(r => r.ArtistName).ToListAsync();
+
+            return artists
+                .Select((d) => new ArtistDTO {
+                    Id = d.Id,
+                    ArtistName = d.ArtistName,
+                    LargeImage = d.LargeImage,
+                    SmallImage = d.SmallImage
                 })
-                .OrderBy(a => a.ArtistName)
                 .ToList();
         }
     }
