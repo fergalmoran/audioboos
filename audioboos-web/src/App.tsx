@@ -17,6 +17,7 @@ import RegisterPage from "./pages/auth/RegisterPage";
 import { useRecoilState } from "recoil";
 import { auth } from "./store";
 import authService from "./services/api/authService";
+import DebugPage from "./pages/DebugPage";
 function App() {
     const [authSettings, setAuthSettings] = useRecoilState(auth);
 
@@ -41,6 +42,9 @@ function App() {
                     </Route>
                     <Route path="/register">
                         <RegisterPage />
+                    </Route>
+                    <Route path="/debug">
+                        <DebugPage />
                     </Route>
                     <Route path="/artist/:artistName/:albumName">
                         <AlbumPage />

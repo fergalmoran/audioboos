@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AudioBoos.Server.Migrations
 {
     [DbContext(typeof(AudioBoosContext))]
-    [Migration("20210124135819_InitialMigration")]
+    [Migration("20210124212856_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,9 @@ namespace AudioBoos.Server.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("LargeImage")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhysicalPath")
                         .HasColumnType("text");
 
                     b.Property<string>("SmallImage")
@@ -153,6 +156,9 @@ namespace AudioBoos.Server.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("AudioUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhysicalPath")
                         .HasColumnType("text");
 
                     b.Property<string>("TrackName")

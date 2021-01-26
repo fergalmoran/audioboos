@@ -1,6 +1,7 @@
 using System;
 using AudioBoos.Server.Migrations.Services.Email;
 using AudioBoos.Server.Persistence;
+using AudioBoos.Server.Services.Jobs;
 using AudioBoos.Server.Services.Startup;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,7 +38,7 @@ namespace AudioBoos.Server {
                 .AddAudioBoosIdentity(Configuration);
 
             services.AddTransient<IEmailSender, EmailSender>();
-
+            
             services.AddControllers();
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "arse", Version = "v1"});
@@ -69,8 +70,8 @@ namespace AudioBoos.Server {
                 endpoints.MapControllers();
             });
 
-            using var scope = app.ApplicationServices.CreateScope();
-            using var context = scope.ServiceProvider.GetService<AudioBoosContext>();
+            // using var scope = app.ApplicationServices.CreateScope();
+            // using var context = scope.ServiceProvider.GetService<AudioBoosContext>();
             //     if (env.IsDevelopment()) {
             //         context?.Database.ExecuteSqlRaw("DROP SCHEMA IF EXISTS app CASCADE");
             //         context?.Database.ExecuteSqlRaw("DROP SCHEMA IF EXISTS auth CASCADE");

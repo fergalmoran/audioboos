@@ -25,10 +25,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="wwwroot\lib\qrcode\qrcode.js" />
-    </ItemGroup>
-
-    <ItemGroup>
         <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Login.cshtml" />
         <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\EnableAuthenticator.cshtml" />
         <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\_StatusMessage.cshtml" />

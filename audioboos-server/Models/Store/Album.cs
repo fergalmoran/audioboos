@@ -9,6 +9,8 @@ namespace AudioBoos.Server.Models.Store {
         public string SmallImage { get; set; }
         public string LargeImage { get; set; }
 
+        public string PhysicalPath { get; set; }
+
         public List<Track> Tracks { get; set; }
     }
 }

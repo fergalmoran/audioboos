@@ -151,6 +151,7 @@ namespace AudioBoos.Server.Migrations
                     Description = table.Column<string>(type: "text", nullable: true),
                     SmallImage = table.Column<string>(type: "text", nullable: true),
                     LargeImage = table.Column<string>(type: "text", nullable: true),
+                    PhysicalPath = table.Column<string>(type: "text", nullable: true),
                     ArtistId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -224,6 +225,7 @@ namespace AudioBoos.Server.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TrackName = table.Column<string>(type: "text", nullable: true),
                     AudioUrl = table.Column<string>(type: "text", nullable: true),
+                    PhysicalPath = table.Column<string>(type: "text", nullable: true),
                     AlbumId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>

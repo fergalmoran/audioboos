@@ -42,6 +42,9 @@ namespace AudioBoos.Server.Migrations
                     b.Property<string>("LargeImage")
                         .HasColumnType("text");
 
+                    b.Property<string>("PhysicalPath")
+                        .HasColumnType("text");
+
                     b.Property<string>("SmallImage")
                         .HasColumnType("text");
 
@@ -151,6 +154,9 @@ namespace AudioBoos.Server.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("AudioUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhysicalPath")
                         .HasColumnType("text");
 
                     b.Property<string>("TrackName")
